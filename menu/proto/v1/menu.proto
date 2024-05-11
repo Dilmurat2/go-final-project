@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package menu.v1;
+
+option go_package = "menu/proto/v1;menu_v1";
+
+import "google/protobuf/empty.proto";
+
+service MenuService {
+  rpc GetMenu (GetMenuRequest) returns (Menu) {}
+  rpc GetAllMenus (google.protobuf.Empty) returns (GetMenuResponse) {}
+  rpc CreateMenu (Menu) returns (Menu) {}
+  rpc UpdateMenu (Menu) returns (Menu) {}
+  rpc DeleteMenu (Menu) returns (google.protobuf.Empty) {}
+}
+
+
+message Item {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  float price = 4;
+}
+
+message Menu {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  repeated Item items = 4;
+}
+
+message GetMenuRequest {
+  string restaurant_id = 1;
+}
+
+message GetMenuResponse {
+  repeated Menu menus = 1;
+}
