@@ -12,6 +12,8 @@ service MenuService {
   rpc CreateMenu (Menu) returns (Menu) {}
   rpc UpdateMenu (Menu) returns (Menu) {}
   rpc DeleteMenu (Menu) returns (google.protobuf.Empty) {}
+  rpc AddItem (AddItemRequest) returns (Menu) {}
+  rpc DeleteItem (DeleteItemRequest) returns (Menu) {}
 }
 
 
@@ -30,9 +32,19 @@ message Menu {
 }
 
 message GetMenuRequest {
-  string restaurant_id = 1;
+  string menu_id = 1;
 }
 
 message GetMenuResponse {
   repeated Menu menus = 1;
+}
+
+message AddItemRequest {
+  string menu_id = 1;
+  Item item = 2;
+}
+
+message DeleteItemRequest {
+  string menu_id = 1;
+  string item_id = 2;
 }

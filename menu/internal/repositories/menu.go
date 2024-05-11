@@ -2,7 +2,6 @@ package repositories
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -20,6 +19,48 @@ const (
 
 type menuRepository struct {
 	mongo *mongo.Client
+}
+
+func NewMenuRepository(cfg *config.Config) (ports.MenuRepository, error) {
+	client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI(
+		fmt.Sprintf("mongodb://%v:%v@%v:%v",
+			cfg.Database.User, cfg.Database.Password, cfg.Database.Host, cfg.Database.Port,
+		)).SetServerAPIOptions(options.ServerAPI(options.ServerAPIVersion1)),
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	if err = client.Database("admin").RunCommand(context.TODO(), bson.D{{Key: "ping", Value: 1}}).Err(); err != nil {
+		return nil, err
+	}
+
+	return &menuRepository{mongo: client}, nil
+}
+
+func (m menuRepository) AddItem(ctx context.Context, menuID string, item *models.Item) (*models.Menu, error) {
+	var menu models.Menu
+	oid, err := primitive.ObjectIDFromHex(menuID)
+	if err != nil {
+		return nil, fmt.Errorf("error converting id to object id: %w", err)
+	}
+	filter := bson.M{"_id": oid}
+	update := bson.M{"$push": bson.M{"items": item}}
+	_, err = m.mongo.Database(MenuDatabase).Collection(MenuCollection).UpdateOne(ctx, filter, update)
+	if err != nil {
+		return nil, fmt.Errorf("error adding item to menu: %w", err)
+	}
+	err = m.mongo.Database(MenuDatabase).Collection(MenuCollection).
+		FindOne(ctx, bson.D{{Key: "_id", Value: oid}}).Decode(&menu)
+	if err != nil {
+		return nil, fmt.Errorf("error getting menu: %w", err)
+	}
+	return &menu, nil
+}
+
+func (m menuRepository) DeleteItem(ctx context.Context, menuID string, itemID string) (*models.Menu, error) {
+	//TODO implement me
+	panic("implement me")
 }
 
 func (m menuRepository) GetAll(ctx context.Context) ([]*models.Menu, error) {
@@ -40,12 +81,9 @@ func (m menuRepository) GetAll(ctx context.Context) ([]*models.Menu, error) {
 
 func (m menuRepository) GetByID(ctx context.Context, id string) (*models.Menu, error) {
 	var menu models.Menu
-	oid, err := primitive.ObjectIDFromHex(id)
-	if err != nil {
-		return nil, fmt.Errorf("error converting id to object id: %w", err)
-	}
-	err = m.mongo.Database(MenuDatabase).Collection(MenuCollection).
-		FindOne(ctx, bson.D{{Key: "_id", Value: oid}}).Decode(&menu)
+
+	err := m.mongo.Database(MenuDatabase).Collection(MenuCollection).
+		FindOne(ctx, bson.D{{Key: "_id", Value: id}}).Decode(&menu)
 	if err != nil {
 		return nil, fmt.Errorf("error getting menu: %w", err)
 	}
@@ -53,17 +91,13 @@ func (m menuRepository) GetByID(ctx context.Context, id string) (*models.Menu, e
 }
 
 func (m menuRepository) Update(ctx context.Context, menu *models.Menu) (*models.Menu, error) {
-	var updatedMenu models.Menu
-	opts := options.FindOneAndUpdate().SetReturnDocument(options.After)
-	err := m.mongo.Database(MenuDatabase).Collection(MenuCollection).
-		FindOneAndUpdate(ctx, bson.D{{Key: "_id", Value: menu.ID}}, bson.D{{Key: "$set", Value: menu}}, opts).Decode(&updatedMenu)
+	filter := bson.M{"_id": menu.ID}
+	update := bson.M{"$set": menu}
+	_, err := m.mongo.Database(MenuDatabase).Collection(MenuCollection).UpdateOne(ctx, filter, update)
 	if err != nil {
-		if errors.Is(err, mongo.ErrNoDocuments) {
-			return nil, fmt.Errorf("menu not found: %w", err)
-		}
 		return nil, fmt.Errorf("error updating menu: %w", err)
 	}
-	return &updatedMenu, nil
+	return menu, nil
 }
 
 func (m menuRepository) Delete(ctx context.Context, id string) error {
@@ -87,21 +121,4 @@ func (m menuRepository) Create(ctx context.Context, menu *models.Menu) (*models.
 
 	menu.ID = result.InsertedID.(string)
 	return menu, nil
-}
-
-func NewMenuRepository(cfg *config.Config) (ports.MenuRepository, error) {
-	client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI(
-		fmt.Sprintf("mongodb://%v:%v@%v:%v",
-			cfg.Database.User, cfg.Database.Password, cfg.Database.Host, cfg.Database.Port,
-		)).SetServerAPIOptions(options.ServerAPI(options.ServerAPIVersion1)),
-	)
-	if err != nil {
-		return nil, err
-	}
-
-	if err = client.Database("admin").RunCommand(context.TODO(), bson.D{{Key: "ping", Value: 1}}).Err(); err != nil {
-		return nil, err
-	}
-
-	return &menuRepository{mongo: client}, nil
 }

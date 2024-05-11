@@ -28,6 +28,8 @@ type MenuServiceClient interface {
 	CreateMenu(ctx context.Context, in *Menu, opts ...grpc.CallOption) (*Menu, error)
 	UpdateMenu(ctx context.Context, in *Menu, opts ...grpc.CallOption) (*Menu, error)
 	DeleteMenu(ctx context.Context, in *Menu, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	AddItem(ctx context.Context, in *AddItemRequest, opts ...grpc.CallOption) (*Menu, error)
+	DeleteItem(ctx context.Context, in *DeleteItemRequest, opts ...grpc.CallOption) (*Menu, error)
 }
 
 type menuServiceClient struct {
@@ -83,6 +85,24 @@ func (c *menuServiceClient) DeleteMenu(ctx context.Context, in *Menu, opts ...gr
 	return out, nil
 }
 
+func (c *menuServiceClient) AddItem(ctx context.Context, in *AddItemRequest, opts ...grpc.CallOption) (*Menu, error) {
+	out := new(Menu)
+	err := c.cc.Invoke(ctx, "/menu.v1.MenuService/AddItem", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *menuServiceClient) DeleteItem(ctx context.Context, in *DeleteItemRequest, opts ...grpc.CallOption) (*Menu, error) {
+	out := new(Menu)
+	err := c.cc.Invoke(ctx, "/menu.v1.MenuService/DeleteItem", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MenuServiceServer is the server API for MenuService service.
 // All implementations must embed UnimplementedMenuServiceServer
 // for forward compatibility
@@ -92,6 +112,8 @@ type MenuServiceServer interface {
 	CreateMenu(context.Context, *Menu) (*Menu, error)
 	UpdateMenu(context.Context, *Menu) (*Menu, error)
 	DeleteMenu(context.Context, *Menu) (*emptypb.Empty, error)
+	AddItem(context.Context, *AddItemRequest) (*Menu, error)
+	DeleteItem(context.Context, *DeleteItemRequest) (*Menu, error)
 	mustEmbedUnimplementedMenuServiceServer()
 }
 
@@ -113,6 +135,12 @@ func (UnimplementedMenuServiceServer) UpdateMenu(context.Context, *Menu) (*Menu,
 }
 func (UnimplementedMenuServiceServer) DeleteMenu(context.Context, *Menu) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteMenu not implemented")
+}
+func (UnimplementedMenuServiceServer) AddItem(context.Context, *AddItemRequest) (*Menu, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddItem not implemented")
+}
+func (UnimplementedMenuServiceServer) DeleteItem(context.Context, *DeleteItemRequest) (*Menu, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteItem not implemented")
 }
 func (UnimplementedMenuServiceServer) mustEmbedUnimplementedMenuServiceServer() {}
 
@@ -217,6 +245,42 @@ func _MenuService_DeleteMenu_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _MenuService_AddItem_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddItemRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MenuServiceServer).AddItem(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/menu.v1.MenuService/AddItem",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MenuServiceServer).AddItem(ctx, req.(*AddItemRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _MenuService_DeleteItem_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteItemRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MenuServiceServer).DeleteItem(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/menu.v1.MenuService/DeleteItem",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MenuServiceServer).DeleteItem(ctx, req.(*DeleteItemRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // MenuService_ServiceDesc is the grpc.ServiceDesc for MenuService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -243,6 +307,14 @@ var MenuService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeleteMenu",
 			Handler:    _MenuService_DeleteMenu_Handler,
+		},
+		{
+			MethodName: "AddItem",
+			Handler:    _MenuService_AddItem_Handler,
+		},
+		{
+			MethodName: "DeleteItem",
+			Handler:    _MenuService_DeleteItem_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

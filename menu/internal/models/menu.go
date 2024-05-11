@@ -2,6 +2,7 @@ package models
 
 import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	menu_v1 "menu/proto/v1"
 	"time"
 )
 
@@ -25,4 +26,23 @@ func NewMenu(name, description string) *Menu {
 		IsActive:    true,
 		CreatedAt:   time.Now().Format(time.RFC3339),
 	}
+}
+
+func PbMenuToModel(pbMenu *menu_v1.Menu) *Menu {
+	menu := &Menu{
+		ID:          pbMenu.Id,
+		Name:        pbMenu.Name,
+		Description: pbMenu.Description,
+	}
+
+	for _, pbItem := range pbMenu.Items {
+		item := Item{
+			ID:    pbItem.Id,
+			Name:  pbItem.Name,
+			Price: pbItem.Price,
+		}
+		menu.Items = append(menu.Items, item)
+	}
+
+	return menu
 }

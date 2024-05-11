@@ -1,14 +1,28 @@
 package models
 
-import "go.mongodb.org/mongo-driver/bson/primitive"
+import (
+	"go.mongodb.org/mongo-driver/bson/primitive"
+	"time"
+)
 
 type Item struct {
-	ID        primitive.ObjectID `json:"id" bson:"_id,omitempty"`
-	Name      string             `json:"name" bson:"name"`
-	Price     float32            `json:"price" bson:"price"`
-	Weight    float32            `json:"weight" bson:"weight"`
-	CreatedAt string             `json:"created_at" bson:"created_at"`
-	UpdatedAt string             `json:"updated_at" bson:"updated_at"`
-	DeletedAt string             `json:"deleted_at" bson:"deleted_at"`
-	IsActive  bool               `json:"is_active" bson:"is_active"`
+	ID        string  `json:"id" bson:"_id,omitempty"`
+	Name      string  `json:"name" bson:"name"`
+	Price     float32 `json:"price" bson:"price"`
+	Weight    float32 `json:"weight" bson:"weight"`
+	CreatedAt string  `json:"created_at" bson:"created_at"`
+	UpdatedAt string  `json:"updated_at" bson:"updated_at"`
+	DeletedAt string  `json:"deleted_at" bson:"deleted_at"`
+	IsActive  bool    `json:"is_active" bson:"is_active"`
+}
+
+func NewItem(name string, price float32, weight float32) *Item {
+	return &Item{
+		ID:        primitive.NewObjectID().Hex(),
+		Name:      name,
+		Price:     price,
+		Weight:    weight,
+		CreatedAt: time.Now().Format(time.RFC3339),
+		IsActive:  true,
+	}
 }
