@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+package menu.v1;
+
+option go_package = "order/proto/v1;order_v1";
+
+//import "google/protobuf/empty.proto";
+
+service OrderService {
+  rpc CreateOrder(Order) returns (CreateOrderResponse) {}
+  rpc GetOrder(GetOrderRequest) returns (Order) {}
+  rpc ChangeOrderStatus(ChangeOrderStatusRequest) returns (ChangeOrderStatusResponse) {}
+}
+
+message GetOrderRequest {
+  string id = 1;
+}
+
+message CreateOrderResponse{
+  string id = 1;
+  string status = 2;
+}
+
+message Item {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  float price = 4;
+}
+
+message Order {
+  string id = 1;
+  string status = 2;
+  repeated Item items = 3;
+}
+
+message ChangeOrderStatusRequest {
+  string id = 1;
+  string status = 2;
+}
+
+message ChangeOrderStatusResponse {
+  string id = 1;
+  string message = 2;
+}
+
