@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+service KitchenService {
+  rpc ProcessOrder(Order) returns (ProcessOrderResponse) {}
+  rpc ChangeOrderStatus() returns () {}
+}
+
+
+
+message Item {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  float price = 4;
+}
+
+message Order {
+  string id = 1;
+  string status = 2;
+  repeated Item items = 3;
+}
+
+message ProcessOrderResponse {
+  string id = 1;
+  string status = 2;
+}
