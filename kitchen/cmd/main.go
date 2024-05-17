@@ -21,7 +21,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("failed to create order repository: %v", err)
 	}
-	oc := services.NewOrderProxy()
+	oc := services.NewOrderProxy(cfg)
 	kitchenService := services.NewKitchenService(kitchenRepository, oc)
 	srv := server.NewServer(kitchenService)
 

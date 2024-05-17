@@ -16,6 +16,7 @@ type kitchenRepository struct {
 func NewKitchenRepository(cfg *config.Config) (ports.KitchenRepository, error) {
 	connectionString := fmt.Sprintf("postgresql://%v:%v@%v:%v/%v",
 		cfg.Database.User, cfg.Database.Password, cfg.Database.Host, cfg.Database.Port, cfg.Database.Name)
+	fmt.Println(connectionString)
 	conn, err := pgx.Connect(context.Background(), connectionString)
 	if err != nil {
 		return nil, err

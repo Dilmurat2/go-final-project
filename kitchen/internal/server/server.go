@@ -33,9 +33,8 @@ func (s Server) ProcessOrder(ctx context.Context, orderPb *order.Order) (*kitche
 }
 
 func (s Server) ChangeOrderStatus(ctx context.Context, request *order.ChangeOrderStatusRequest) (*emptypb.Empty, error) {
-
-	fmt.Println(request.GetId())
 	orderId := request.GetId()
+	fmt.Println(orderId)
 	orderStatus := models.OrderStatus(request.GetStatus())
 	err := s.KitchenService.ChangeOrderStatus(ctx, orderId, &orderStatus)
 	if err != nil {

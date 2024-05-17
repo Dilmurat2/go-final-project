@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"google.golang.org/grpc"
+	"kitchenService/internal/config"
 	"kitchenService/proto/order"
 	"log"
 )
@@ -12,8 +13,8 @@ type orderProxy struct {
 	client order.OrderServiceClient
 }
 
-func NewOrderProxy() *orderProxy {
-	conn, err := grpc.Dial("localhost:50051", grpc.WithInsecure())
+func NewOrderProxy(cfg *config.Config) *orderProxy {
+	conn, err := grpc.NewClient(cfg.OderServiceAddress, grpc.WithInsecure())
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
