@@ -19,5 +19,5 @@ func (k KitchenService) ProcessOrder(ctx context.Context, order *models.Order) (
 }
 
 func (k KitchenService) ChangeOrderStatus(ctx context.Context, orderId string, status *models.OrderStatus) error {
-	return k.ChangeOrderStatus(ctx, orderId, status)
+	return k.kitchenRepository.ChangeOrderStatus(ctx, orderId, status)
 }
