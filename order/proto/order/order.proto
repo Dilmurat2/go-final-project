@@ -8,6 +8,7 @@ service OrderService {
   rpc CreateOrder(Order) returns (CreateOrderResponse) {}
   rpc GetOrder(GetOrderRequest) returns (Order) {}
   rpc ChangeOrderStatus(ChangeOrderStatusRequest) returns (ChangeOrderStatusResponse) {}
+  rpc CancelOrder(ChangeOrderStatusRequest) returns (ChangeOrderStatusResponse) {}
 }
 
 message GetOrderRequest {

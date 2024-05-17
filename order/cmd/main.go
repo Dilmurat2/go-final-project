@@ -1,14 +1,13 @@
 package main
 
 import (
-	"google.golang.org/grpc"
 	"log"
-	"net"
+	"log/slog"
 	"orderService/config"
-	"orderService/internal/repositories"
-	"orderService/internal/server"
-	"orderService/internal/services"
-	order_v1 "orderService/proto/v1"
+	"orderService/internal/app"
+	"os"
+	"os/signal"
+	"syscall"
 )
 
 func main() {
@@ -16,21 +15,18 @@ func main() {
 	if err != nil {
 		log.Fatalln(err)
 	}
-	orderRepository, err := repositories.NewOrderRepository(cfg)
-	if err != nil {
-		log.Fatalf("failed to create order repository: %v", err)
-	}
-	orderService := services.NewOrderService(orderRepository)
-	srv := server.NewServer(orderService)
+	application := app.New(cfg)
+	go func() {
+		if err := application.GRPCServer.Run(); err != nil {
+			log.Fatalf("failed to run grpc server: %v", err)
+		}
+	}()
 
-	lis, err := net.Listen("tcp", ":50051")
-	if err != nil {
-		log.Fatalf("failed to listen: %v", err)
-	}
-	s := grpc.NewServer()
-	order_v1.RegisterOrderServiceServer(s, srv)
-	if err := s.Serve(lis); err != nil {
-		log.Fatalf("failed to serve: %v", err)
-	}
+	stop := make(chan os.Signal, 1)
+	signal.Notify(stop, syscall.SIGTERM, syscall.SIGINT)
 
+	<-stop
+
+	application.GRPCServer.Stop()
+	slog.Info("Gracefully stopped")
 }

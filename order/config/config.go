@@ -14,7 +14,8 @@ type database struct {
 }
 
 type Config struct {
-	Database database
+	Database              database
+	KitchenServiceAddress string `envconfig:"KITCHEN_SERVICE_ADDRESS"`
 }
 
 func New() (*Config, error) {

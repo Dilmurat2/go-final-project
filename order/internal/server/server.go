@@ -2,17 +2,18 @@ package server
 
 import (
 	"context"
-	"orderService/internal/services"
+	"fmt"
+	"orderService/internal/ports"
 	"orderService/pkg/helpers"
-	order_v1 "orderService/proto/v1"
+	order_v1 "orderService/proto/order"
 )
 
 type Server struct {
 	order_v1.UnimplementedOrderServiceServer
-	orderService *services.OrderService
+	orderService ports.OrderService
 }
 
-func NewServer(orderService *services.OrderService) *Server {
+func NewServer(orderService ports.OrderService) *Server {
 	return &Server{
 		orderService: orderService,
 	}
@@ -26,7 +27,7 @@ func (s *Server) CreateOrder(ctx context.Context, req *order_v1.Order) (*order_v
 	}
 	return &order_v1.CreateOrderResponse{
 		Id:     id,
-		Status: "Created",
+		Status: "Order created successfully",
 	}, nil
 }
 
@@ -39,12 +40,24 @@ func (s *Server) GetOrder(ctx context.Context, req *order_v1.GetOrderRequest) (*
 }
 
 func (s *Server) ChangeOrderStatus(ctx context.Context, req *order_v1.ChangeOrderStatusRequest) (*order_v1.ChangeOrderStatusResponse, error) {
+	fmt.Println(req.Id)
 	id, err := s.orderService.ChangeOrderStatus(ctx, req.GetId(), req.GetStatus())
 	if err != nil {
 		return nil, err
 	}
 	return &order_v1.ChangeOrderStatusResponse{
-		Id:     id,
-		Status: "Updated",
+		Id:      id,
+		Message: "Changed",
+	}, nil
+}
+
+func (s *Server) CancelOrder(ctx context.Context, req *order_v1.ChangeOrderStatusRequest) (*order_v1.ChangeOrderStatusResponse, error) {
+	id, err := s.orderService.CancelOrder(ctx, req.GetId())
+	if err != nil {
+		return nil, err
+	}
+	return &order_v1.ChangeOrderStatusResponse{
+		Id:      id,
+		Message: "order successfully cancelled",
 	}, nil
 }
