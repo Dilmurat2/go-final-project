@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package kitchen.v1;
+
+option go_package = "proto";
+
+import "google/protobuf/empty.proto";
+import "proto/order/order.proto";
+
+service KitchenService {
+  rpc ProcessOrder(order.Order) returns (ProcessOrderResponse) {}
+  rpc ChangeOrderStatus(ChangeOrderStatusRequest) returns (google.protobuf.Empty) {}
+}
+
+message ProcessOrderResponse {
+  string id = 1;
+  string status = 2;
+}
+
+message ChangeOrderStatusRequest {
+  string orderId = 1;
+  string orderStatus = 2;
+}

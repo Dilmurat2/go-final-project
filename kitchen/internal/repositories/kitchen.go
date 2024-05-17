@@ -52,7 +52,7 @@ func (k *kitchenRepository) ProcessOrder(ctx context.Context, order *models.Orde
 		return "", nil, fmt.Errorf("failed to commit transaction: %v", err)
 	}
 
-	orderStatus := models.Order{Status: models.OrderStatusCompleted}.Status
+	orderStatus := models.Order{Status: models.OrderStatusPending}.Status
 
 	return order.ID, &orderStatus, nil
 }

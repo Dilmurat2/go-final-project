@@ -1,10 +1,8 @@
 syntax = "proto3";
 
-package menu.v1;
+package order;
 
-option go_package = "order/proto/v1;order_v1";
-
-//import "google/protobuf/empty.proto";
+option go_package = "kitchenService/proto/order";
 
 service OrderService {
   rpc CreateOrder(Order) returns (CreateOrderResponse) {}
@@ -16,7 +14,7 @@ message GetOrderRequest {
   string id = 1;
 }
 
-message CreateOrderResponse{
+message CreateOrderResponse {
   string id = 1;
   string status = 2;
 }
@@ -43,4 +41,3 @@ message ChangeOrderStatusResponse {
   string id = 1;
   string message = 2;
 }
-

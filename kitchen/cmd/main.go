@@ -6,7 +6,8 @@ import (
 	"kitchenService/internal/repositories"
 	"kitchenService/internal/server"
 	"kitchenService/internal/services"
-	kitchen_v1 "kitchenService/proto/v1"
+	"kitchenService/proto/kitchen"
+
 	"log"
 	"net"
 )
@@ -20,7 +21,8 @@ func main() {
 	if err != nil {
 		log.Fatalf("failed to create order repository: %v", err)
 	}
-	kitchenService := services.NewKitchenService(kitchenRepository)
+	oc := services.NewOrderProxy()
+	kitchenService := services.NewKitchenService(kitchenRepository, oc)
 	srv := server.NewServer(kitchenService)
 
 	lis, err := net.Listen("tcp", ":50052")
@@ -28,7 +30,7 @@ func main() {
 		log.Fatalf("failed to listen: %v", err)
 	}
 	s := grpc.NewServer()
-	kitchen_v1.RegisterKitchenServiceServer(s, srv)
+	kitchen.RegisterKitchenServiceServer(s, srv)
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)
 	}

@@ -2,9 +2,9 @@
 // versions:
 // - protoc-gen-go-grpc v1.2.0
 // - protoc             v4.24.3
-// source: proto/v1/order.proto
+// source: proto/order/order.proto
 
-package order_v1
+package order
 
 import (
 	context "context"
@@ -37,7 +37,7 @@ func NewOrderServiceClient(cc grpc.ClientConnInterface) OrderServiceClient {
 
 func (c *orderServiceClient) CreateOrder(ctx context.Context, in *Order, opts ...grpc.CallOption) (*CreateOrderResponse, error) {
 	out := new(CreateOrderResponse)
-	err := c.cc.Invoke(ctx, "/menu.v1.OrderService/CreateOrder", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/order.OrderService/CreateOrder", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -46,7 +46,7 @@ func (c *orderServiceClient) CreateOrder(ctx context.Context, in *Order, opts ..
 
 func (c *orderServiceClient) GetOrder(ctx context.Context, in *GetOrderRequest, opts ...grpc.CallOption) (*Order, error) {
 	out := new(Order)
-	err := c.cc.Invoke(ctx, "/menu.v1.OrderService/GetOrder", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/order.OrderService/GetOrder", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -55,7 +55,7 @@ func (c *orderServiceClient) GetOrder(ctx context.Context, in *GetOrderRequest, 
 
 func (c *orderServiceClient) ChangeOrderStatus(ctx context.Context, in *ChangeOrderStatusRequest, opts ...grpc.CallOption) (*ChangeOrderStatusResponse, error) {
 	out := new(ChangeOrderStatusResponse)
-	err := c.cc.Invoke(ctx, "/menu.v1.OrderService/ChangeOrderStatus", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/order.OrderService/ChangeOrderStatus", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -108,7 +108,7 @@ func _OrderService_CreateOrder_Handler(srv interface{}, ctx context.Context, dec
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/menu.v1.OrderService/CreateOrder",
+		FullMethod: "/order.OrderService/CreateOrder",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(OrderServiceServer).CreateOrder(ctx, req.(*Order))
@@ -126,7 +126,7 @@ func _OrderService_GetOrder_Handler(srv interface{}, ctx context.Context, dec fu
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/menu.v1.OrderService/GetOrder",
+		FullMethod: "/order.OrderService/GetOrder",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(OrderServiceServer).GetOrder(ctx, req.(*GetOrderRequest))
@@ -144,7 +144,7 @@ func _OrderService_ChangeOrderStatus_Handler(srv interface{}, ctx context.Contex
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/menu.v1.OrderService/ChangeOrderStatus",
+		FullMethod: "/order.OrderService/ChangeOrderStatus",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(OrderServiceServer).ChangeOrderStatus(ctx, req.(*ChangeOrderStatusRequest))
@@ -156,7 +156,7 @@ func _OrderService_ChangeOrderStatus_Handler(srv interface{}, ctx context.Contex
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var OrderService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "menu.v1.OrderService",
+	ServiceName: "order.OrderService",
 	HandlerType: (*OrderServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -173,5 +173,5 @@ var OrderService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "proto/v1/order.proto",
+	Metadata: "proto/order/order.proto",
 }

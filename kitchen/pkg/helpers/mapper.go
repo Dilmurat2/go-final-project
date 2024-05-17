@@ -2,16 +2,16 @@ package helpers
 
 import (
 	"kitchenService/internal/models"
-	pbkitchen "kitchenService/proto/v1"
+	order2 "kitchenService/proto/order"
 )
 
-func OrderModelToProtobuf(order *models.Order) *pbkitchen.Order {
-	var pbOrder pbkitchen.Order
+func OrderModelToProtobuf(order *models.Order) *order2.Order {
+	var pbOrder order2.Order
 
 	pbOrder.Id = order.ID
 	pbOrder.Status = string(order.Status)
 	for _, item := range order.Items {
-		pbOrder.Items = append(pbOrder.Items, &pbkitchen.Item{
+		pbOrder.Items = append(pbOrder.Items, &order2.Item{
 			Name:  item.Name,
 			Price: item.Price,
 		})
@@ -20,7 +20,7 @@ func OrderModelToProtobuf(order *models.Order) *pbkitchen.Order {
 	return &pbOrder
 }
 
-func OrderPbToModel(pbOrder *pbkitchen.Order) *models.Order {
+func OrderPbToModel(pbOrder *order2.Order) *models.Order {
 	var order models.Order
 	order.Status = models.OrderStatus(pbOrder.Status)
 	order.ID = pbOrder.GetId()
