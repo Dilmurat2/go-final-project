@@ -9,7 +9,7 @@ const (
 )
 
 type Order struct {
-	ID     int         `json:"id"`
+	ID     string      `json:"id"`
 	Items  []Item      `json:"items"`
 	Status OrderStatus `json:"status"`
 }

@@ -1,8 +1,12 @@
 syntax = "proto3";
 
+option go_package = "/";
+
+import "google/protobuf/empty.proto";
+
 service KitchenService {
   rpc ProcessOrder(Order) returns (ProcessOrderResponse) {}
-  rpc ChangeOrderStatus() returns () {}
+  rpc ChangeOrderStatus(ChangeOrderStatusRequest) returns (google.protobuf.Empty) {}
 }
 
 
@@ -23,4 +27,9 @@ message Order {
 message ProcessOrderResponse {
   string id = 1;
   string status = 2;
+}
+
+message ChangeOrderStatusRequest{
+  string orderId = 1;
+  string orderStatus = 2;
 }

@@ -11,6 +11,7 @@ type database struct {
 	Port     int    `envconfig:"DB_PORT"`
 	User     string `envconfig:"DB_USER"`
 	Password string `envconfig:"DB_PASSWORD"`
+	Name     string `envconfig:"DB_NAME"`
 }
 
 type Config struct {
