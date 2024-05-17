@@ -19,17 +19,12 @@ func NewOrderService(or ports.OrderRepository, kc *kitchenProxy) ports.OrderServ
 		kitchenClient:   kc,
 	}
 }
-
 func (o *OrderService) CreateOrder(ctx context.Context, order *models.Order) (string, error) {
 	newOrder := models.NewOrder(order.Items)
-	_, err := o.orderRepository.CreateOrder(ctx, newOrder)
-	if err != nil {
-		return "", err
+	if err := o.kitchenClient.ProcessOrder(ctx, newOrder); err != nil {
+		fmt.Printf("failed to process order: %v", err)
 	}
-	if err := o.kitchenClient.ProcessOrder(newOrder); err != nil {
-		return "", err
-	}
-	return newOrder.ID, nil
+	return o.orderRepository.CreateOrder(ctx, newOrder)
 }
 
 func (o *OrderService) GetOrder(ctx context.Context, id string) (*models.Order, error) {
@@ -52,7 +47,7 @@ func (o *OrderService) CancelOrder(ctx context.Context, id string) (string, erro
 	if order.Status != models.OrderStatusPending && t >= 5 {
 		return "", fmt.Errorf("order can't be cancelled")
 	}
-	if err := o.kitchenClient.ChangeOrderStatus(id, string(models.OrderStatusCancelled)); err != nil {
+	if err := o.kitchenClient.ChangeOrderStatus(ctx, id, string(models.OrderStatusCancelled)); err != nil {
 		return "", err
 	}
 	return o.orderRepository.ChangeOrderStatus(ctx, id, string(models.OrderStatusCancelled))

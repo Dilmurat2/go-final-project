@@ -2,7 +2,6 @@ package server
 
 import (
 	"context"
-	"fmt"
 	"orderService/internal/ports"
 	"orderService/pkg/helpers"
 	order_v1 "orderService/proto/order"
@@ -40,7 +39,6 @@ func (s *Server) GetOrder(ctx context.Context, req *order_v1.GetOrderRequest) (*
 }
 
 func (s *Server) ChangeOrderStatus(ctx context.Context, req *order_v1.ChangeOrderStatusRequest) (*order_v1.ChangeOrderStatusResponse, error) {
-	fmt.Println(req.Id)
 	id, err := s.orderService.ChangeOrderStatus(ctx, req.GetId(), req.GetStatus())
 	if err != nil {
 		return nil, err

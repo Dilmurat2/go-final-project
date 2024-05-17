@@ -51,7 +51,6 @@ func (o *OrderRepository) GetOrder(ctx context.Context, id string) (*models.Orde
 }
 
 func (o *OrderRepository) ChangeOrderStatus(ctx context.Context, id, status string) (string, error) {
-
 	update := bson.M{"$set": bson.M{"status": status}}
 	if _, err := o.mongo.Database("orders").Collection("orders").UpdateOne(ctx, bson.M{"_id": id}, update); err != nil {
 		return "", fmt.Errorf("failed to cancel order: %v", err)

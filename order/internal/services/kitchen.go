@@ -26,17 +26,17 @@ func NewKitchenProxy(cfg *config.Config) *kitchenProxy {
 	return &kitchenProxy{client: client}
 }
 
-func (kc *kitchenProxy) ProcessOrder(order *models.Order) error {
+func (kc *kitchenProxy) ProcessOrder(ctx context.Context, order *models.Order) error {
 	orderReq := helpers.OrderModelToProtobuf(order)
-	_, err := kc.client.ProcessOrder(context.Background(), orderReq)
+	_, err := kc.client.ProcessOrder(ctx, orderReq)
 	if err != nil {
 		return fmt.Errorf("could not process order: %v", err)
 	}
 	return nil
 }
 
-func (kc *kitchenProxy) ChangeOrderStatus(orderId, status string) error {
-	_, err := kc.client.ChangeOrderStatus(context.Background(), &order_v1.ChangeOrderStatusRequest{
+func (kc *kitchenProxy) ChangeOrderStatus(ctx context.Context, orderId, status string) error {
+	_, err := kc.client.ChangeOrderStatus(ctx, &order_v1.ChangeOrderStatusRequest{
 		Id:     orderId,
 		Status: status,
 	})
