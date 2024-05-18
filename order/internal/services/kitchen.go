@@ -7,26 +7,27 @@ import (
 	"log"
 	"orderService/config"
 	"orderService/internal/models"
+	"orderService/internal/ports"
 	"orderService/pkg/helpers"
-	kitchen "orderService/proto/kitchen"
+	"orderService/proto/kitchen"
 	order_v1 "orderService/proto/order"
 )
 
-type kitchenProxy struct {
+type kitchenServiceClientProxy struct {
 	client kitchen.KitchenServiceClient
 }
 
-func NewKitchenProxy(cfg *config.Config) *kitchenProxy {
+func NewKitchenProxy(cfg *config.Config) ports.KitchenServiceClientProxy {
 	conn, err := grpc.Dial(cfg.KitchenServiceAddress, grpc.WithInsecure())
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
 	client := kitchen.NewKitchenServiceClient(conn)
 
-	return &kitchenProxy{client: client}
+	return &kitchenServiceClientProxy{client: client}
 }
 
-func (kc *kitchenProxy) ProcessOrder(ctx context.Context, order *models.Order) error {
+func (kc *kitchenServiceClientProxy) ProcessOrder(ctx context.Context, order *models.Order) error {
 	orderReq := helpers.OrderModelToProtobuf(order)
 	_, err := kc.client.ProcessOrder(ctx, orderReq)
 	if err != nil {
@@ -35,12 +36,11 @@ func (kc *kitchenProxy) ProcessOrder(ctx context.Context, order *models.Order) e
 	return nil
 }
 
-func (kc *kitchenProxy) ChangeOrderStatus(ctx context.Context, orderId, status string) error {
+func (kc *kitchenServiceClientProxy) ChangeOrderStatus(ctx context.Context, orderId, status string) error {
 	_, err := kc.client.ChangeOrderStatus(ctx, &order_v1.ChangeOrderStatusRequest{
 		Id:     orderId,
 		Status: status,
 	})
-	fmt.Println(orderId)
 	if err != nil {
 		return fmt.Errorf("could not change order status: %v", err)
 	}

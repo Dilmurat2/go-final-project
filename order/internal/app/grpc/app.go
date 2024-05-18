@@ -63,7 +63,6 @@ func (a *App) Run() error {
 
 	return nil
 }
-
 func (a *App) Stop() {
 	const op = "grpcapp.Stop"
 

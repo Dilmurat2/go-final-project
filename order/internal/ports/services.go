@@ -11,3 +11,8 @@ type OrderService interface {
 	ChangeOrderStatus(ctx context.Context, id string, status string) (string, error)
 	CancelOrder(ctx context.Context, id string) (string, error)
 }
+
+type KitchenServiceClientProxy interface {
+	ProcessOrder(ctx context.Context, order *models.Order) error
+	ChangeOrderStatus(ctx context.Context, orderId, status string) error
+}

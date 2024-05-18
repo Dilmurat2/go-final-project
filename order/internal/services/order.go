@@ -9,34 +9,35 @@ import (
 	"orderService/pkg/helpers"
 )
 
-type OrderService struct {
+type orderService struct {
 	orderRepository ports.OrderRepository
-	kitchenClient   *kitchenProxy
+	kitchenClient   ports.KitchenServiceClientProxy
 }
 
-func NewOrderService(or ports.OrderRepository, kc *kitchenProxy) ports.OrderService {
-	return &OrderService{
+func NewOrderService(or ports.OrderRepository, kc ports.KitchenServiceClientProxy) ports.OrderService {
+	return &orderService{
 		orderRepository: or,
 		kitchenClient:   kc,
 	}
 }
-func (o *OrderService) CreateOrder(ctx context.Context, order *models.Order) (string, error) {
+func (o *orderService) CreateOrder(ctx context.Context, order *models.Order) (string, error) {
 	newOrder := models.NewOrder(order.Items)
 	if err := o.kitchenClient.ProcessOrder(ctx, newOrder); err != nil {
 		fmt.Printf("failed to process order: %v", err)
+		return "", err
 	}
 	return o.orderRepository.CreateOrder(ctx, newOrder)
 }
 
-func (o *OrderService) GetOrder(ctx context.Context, id string) (*models.Order, error) {
+func (o *orderService) GetOrder(ctx context.Context, id string) (*models.Order, error) {
 	return o.orderRepository.GetOrder(ctx, id)
 }
 
-func (o *OrderService) ChangeOrderStatus(ctx context.Context, id, status string) (string, error) {
+func (o *orderService) ChangeOrderStatus(ctx context.Context, id, status string) (string, error) {
 	return o.orderRepository.ChangeOrderStatus(ctx, id, status)
 }
 
-func (o *OrderService) CancelOrder(ctx context.Context, id string) (string, error) {
+func (o *orderService) CancelOrder(ctx context.Context, id string) (string, error) {
 	order, err := o.orderRepository.GetOrder(ctx, id)
 	if err != nil {
 		return "", err
