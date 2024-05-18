@@ -2,9 +2,9 @@
 // versions:
 // - protoc-gen-go-grpc v1.2.0
 // - protoc             v4.24.3
-// source: proto/v1/menu.proto
+// source: proto/menu/menu.proto
 
-package menu_v1
+package menu
 
 import (
 	context "context"
@@ -42,7 +42,7 @@ func NewMenuServiceClient(cc grpc.ClientConnInterface) MenuServiceClient {
 
 func (c *menuServiceClient) GetMenu(ctx context.Context, in *GetMenuRequest, opts ...grpc.CallOption) (*Menu, error) {
 	out := new(Menu)
-	err := c.cc.Invoke(ctx, "/menu.v1.MenuService/GetMenu", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/menu.MenuService/GetMenu", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -51,7 +51,7 @@ func (c *menuServiceClient) GetMenu(ctx context.Context, in *GetMenuRequest, opt
 
 func (c *menuServiceClient) GetAllMenus(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*GetMenuResponse, error) {
 	out := new(GetMenuResponse)
-	err := c.cc.Invoke(ctx, "/menu.v1.MenuService/GetAllMenus", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/menu.MenuService/GetAllMenus", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -60,7 +60,7 @@ func (c *menuServiceClient) GetAllMenus(ctx context.Context, in *emptypb.Empty, 
 
 func (c *menuServiceClient) CreateMenu(ctx context.Context, in *Menu, opts ...grpc.CallOption) (*Menu, error) {
 	out := new(Menu)
-	err := c.cc.Invoke(ctx, "/menu.v1.MenuService/CreateMenu", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/menu.MenuService/CreateMenu", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -69,7 +69,7 @@ func (c *menuServiceClient) CreateMenu(ctx context.Context, in *Menu, opts ...gr
 
 func (c *menuServiceClient) UpdateMenu(ctx context.Context, in *Menu, opts ...grpc.CallOption) (*Menu, error) {
 	out := new(Menu)
-	err := c.cc.Invoke(ctx, "/menu.v1.MenuService/UpdateMenu", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/menu.MenuService/UpdateMenu", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -78,7 +78,7 @@ func (c *menuServiceClient) UpdateMenu(ctx context.Context, in *Menu, opts ...gr
 
 func (c *menuServiceClient) DeleteMenu(ctx context.Context, in *Menu, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, "/menu.v1.MenuService/DeleteMenu", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/menu.MenuService/DeleteMenu", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -87,7 +87,7 @@ func (c *menuServiceClient) DeleteMenu(ctx context.Context, in *Menu, opts ...gr
 
 func (c *menuServiceClient) AddItem(ctx context.Context, in *AddItemRequest, opts ...grpc.CallOption) (*Menu, error) {
 	out := new(Menu)
-	err := c.cc.Invoke(ctx, "/menu.v1.MenuService/AddItem", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/menu.MenuService/AddItem", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -96,7 +96,7 @@ func (c *menuServiceClient) AddItem(ctx context.Context, in *AddItemRequest, opt
 
 func (c *menuServiceClient) DeleteItem(ctx context.Context, in *DeleteItemRequest, opts ...grpc.CallOption) (*Menu, error) {
 	out := new(Menu)
-	err := c.cc.Invoke(ctx, "/menu.v1.MenuService/DeleteItem", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/menu.MenuService/DeleteItem", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -165,7 +165,7 @@ func _MenuService_GetMenu_Handler(srv interface{}, ctx context.Context, dec func
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/menu.v1.MenuService/GetMenu",
+		FullMethod: "/menu.MenuService/GetMenu",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(MenuServiceServer).GetMenu(ctx, req.(*GetMenuRequest))
@@ -183,7 +183,7 @@ func _MenuService_GetAllMenus_Handler(srv interface{}, ctx context.Context, dec 
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/menu.v1.MenuService/GetAllMenus",
+		FullMethod: "/menu.MenuService/GetAllMenus",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(MenuServiceServer).GetAllMenus(ctx, req.(*emptypb.Empty))
@@ -201,7 +201,7 @@ func _MenuService_CreateMenu_Handler(srv interface{}, ctx context.Context, dec f
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/menu.v1.MenuService/CreateMenu",
+		FullMethod: "/menu.MenuService/CreateMenu",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(MenuServiceServer).CreateMenu(ctx, req.(*Menu))
@@ -219,7 +219,7 @@ func _MenuService_UpdateMenu_Handler(srv interface{}, ctx context.Context, dec f
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/menu.v1.MenuService/UpdateMenu",
+		FullMethod: "/menu.MenuService/UpdateMenu",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(MenuServiceServer).UpdateMenu(ctx, req.(*Menu))
@@ -237,7 +237,7 @@ func _MenuService_DeleteMenu_Handler(srv interface{}, ctx context.Context, dec f
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/menu.v1.MenuService/DeleteMenu",
+		FullMethod: "/menu.MenuService/DeleteMenu",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(MenuServiceServer).DeleteMenu(ctx, req.(*Menu))
@@ -255,7 +255,7 @@ func _MenuService_AddItem_Handler(srv interface{}, ctx context.Context, dec func
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/menu.v1.MenuService/AddItem",
+		FullMethod: "/menu.MenuService/AddItem",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(MenuServiceServer).AddItem(ctx, req.(*AddItemRequest))
@@ -273,7 +273,7 @@ func _MenuService_DeleteItem_Handler(srv interface{}, ctx context.Context, dec f
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/menu.v1.MenuService/DeleteItem",
+		FullMethod: "/menu.MenuService/DeleteItem",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(MenuServiceServer).DeleteItem(ctx, req.(*DeleteItemRequest))
@@ -285,7 +285,7 @@ func _MenuService_DeleteItem_Handler(srv interface{}, ctx context.Context, dec f
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var MenuService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "menu.v1.MenuService",
+	ServiceName: "menu.MenuService",
 	HandlerType: (*MenuServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -318,5 +318,5 @@ var MenuService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "proto/v1/menu.proto",
+	Metadata: "proto/menu/menu.proto",
 }

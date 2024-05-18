@@ -7,7 +7,7 @@ import (
 	"google.golang.org/protobuf/types/known/emptypb"
 	"menu/internal/models"
 	"menu/internal/ports"
-	menu_v1 "menu/proto/v1"
+	menu_v1 "menu/proto/menu"
 	"time"
 )
 

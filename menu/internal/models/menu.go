@@ -2,7 +2,7 @@ package models
 
 import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	menu_v1 "menu/proto/v1"
+	"menu/proto/menu"
 	"time"
 )
 
@@ -28,7 +28,7 @@ func NewMenu(name, description string) *Menu {
 	}
 }
 
-func PbMenuToModel(pbMenu *menu_v1.Menu) *Menu {
+func PbMenuToModel(pbMenu *menu.Menu) *Menu {
 	menu := &Menu{
 		ID:          pbMenu.Id,
 		Name:        pbMenu.Name,

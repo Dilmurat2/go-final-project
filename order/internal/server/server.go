@@ -2,7 +2,9 @@ package server
 
 import (
 	"context"
+	"errors"
 	"orderService/internal/ports"
+	"orderService/pkg/app_errors"
 	"orderService/pkg/helpers"
 	order_v1 "orderService/proto/order"
 )
@@ -52,6 +54,12 @@ func (s *Server) ChangeOrderStatus(ctx context.Context, req *order_v1.ChangeOrde
 func (s *Server) CancelOrder(ctx context.Context, req *order_v1.ChangeOrderStatusRequest) (*order_v1.ChangeOrderStatusResponse, error) {
 	id, err := s.orderService.CancelOrder(ctx, req.GetId())
 	if err != nil {
+		if errors.Is(err, app_errors.ErrCantCancelOrder) {
+			return &order_v1.ChangeOrderStatusResponse{
+				Id:      id,
+				Message: "can't cancel order",
+			}, nil
+		}
 		return nil, err
 	}
 	return &order_v1.ChangeOrderStatusResponse{

@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -9,6 +10,7 @@ import (
 	"orderService/config"
 	"orderService/internal/models"
 	"orderService/internal/ports"
+	"orderService/pkg/app_errors"
 )
 
 type OrderRepository struct {
@@ -43,10 +45,13 @@ func (o *OrderRepository) CreateOrder(ctx context.Context, order *models.Order) 
 
 func (o *OrderRepository) GetOrder(ctx context.Context, id string) (*models.Order, error) {
 	order := new(models.Order)
-	if err := o.mongo.Database("orders").Collection("orders").FindOne(ctx, bson.M{"_id": id}).Decode(order); err != nil {
-		return nil, fmt.Errorf("failed to get order: %v", err)
+	err := o.mongo.Database("orders").Collection("orders").FindOne(ctx, bson.M{"_id": id}).Decode(order)
+	if err != nil {
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			err = app_errors.ErrOrderNotFound
+		}
+		return nil, err
 	}
-
 	return order, nil
 }
 

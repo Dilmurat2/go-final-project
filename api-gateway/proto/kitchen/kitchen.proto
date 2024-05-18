@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package kitchen;
+
+option go_package = "proto/kitchen";
+
+import "google/protobuf/empty.proto";
+import "proto/order/order.proto";
+import "proto/google/api/annotations.proto";
+
+service KitchenService {
+  rpc ProcessOrder(order.Order) returns (ProcessOrderResponse) {
+    option (google.api.http) = {
+      post: "/v1/kitchen/order"
+      body: "*"
+    };
+  }
+  rpc ChangeOrderStatus(order.ChangeOrderStatusRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      put: "/v1/kitchen/order/{id}"
+      body: "*"
+    };
+  }
+}
+
+message ProcessOrderResponse {
+  string id = 1;
+  string status = 2;
+}

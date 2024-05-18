@@ -8,7 +8,7 @@ import (
 	"menu/internal/repositories"
 	"menu/internal/server"
 	"menu/internal/services"
-	menu_v1 "menu/proto/v1"
+	"menu/proto/menu"
 	"net"
 )
 
@@ -25,12 +25,12 @@ func main() {
 
 	srv := server.NewServer(menuService)
 
-	lis, err := net.Listen("tcp", fmt.Sprintf(":%v", "50051"))
+	lis, err := net.Listen("tcp", fmt.Sprintf(":%v", "50052"))
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
 	s := grpc.NewServer()
-	menu_v1.RegisterMenuServiceServer(s, srv)
+	menu.RegisterMenuServiceServer(s, srv)
 	log.Printf("server listening at %v", lis.Addr())
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)

@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package menu.v1;
+package menu;
 
-option go_package = "menu/proto/v1;menu_v1";
+option go_package = "proto/menu";
 
 import "google/protobuf/empty.proto";
 

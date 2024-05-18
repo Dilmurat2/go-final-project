@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"orderService/internal/models"
 	"orderService/internal/ports"
+	"orderService/pkg/app_errors"
 	"orderService/pkg/helpers"
 )
 
@@ -36,7 +37,7 @@ func (o *OrderService) ChangeOrderStatus(ctx context.Context, id, status string)
 }
 
 func (o *OrderService) CancelOrder(ctx context.Context, id string) (string, error) {
-	order, err := o.GetOrder(ctx, id)
+	order, err := o.orderRepository.GetOrder(ctx, id)
 	if err != nil {
 		return "", err
 	}
@@ -45,7 +46,7 @@ func (o *OrderService) CancelOrder(ctx context.Context, id string) (string, erro
 		return "", fmt.Errorf("failed to calculate time since creation: %v", err)
 	}
 	if order.Status != models.OrderStatusPending && t >= 5 {
-		return "", fmt.Errorf("order can't be cancelled")
+		return "", app_errors.ErrCantCancelOrder
 	}
 	if err := o.kitchenClient.ChangeOrderStatus(ctx, id, string(models.OrderStatusCancelled)); err != nil {
 		return "", err
