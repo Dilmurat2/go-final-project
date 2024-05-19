@@ -38,7 +38,7 @@ func NewKitchenServiceClient(cc grpc.ClientConnInterface) KitchenServiceClient {
 
 func (c *kitchenServiceClient) ProcessOrder(ctx context.Context, in *order.Order, opts ...grpc.CallOption) (*ProcessOrderResponse, error) {
 	out := new(ProcessOrderResponse)
-	err := c.cc.Invoke(ctx, "/kitchen.v1.KitchenService/ProcessOrder", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/kitchen.KitchenService/ProcessOrder", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -47,7 +47,7 @@ func (c *kitchenServiceClient) ProcessOrder(ctx context.Context, in *order.Order
 
 func (c *kitchenServiceClient) ChangeOrderStatus(ctx context.Context, in *order.ChangeOrderStatusRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, "/kitchen.v1.KitchenService/ChangeOrderStatus", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/kitchen.KitchenService/ChangeOrderStatus", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -96,7 +96,7 @@ func _KitchenService_ProcessOrder_Handler(srv interface{}, ctx context.Context, 
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/kitchen.v1.KitchenService/ProcessOrder",
+		FullMethod: "/kitchen.KitchenService/ProcessOrder",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(KitchenServiceServer).ProcessOrder(ctx, req.(*order.Order))
@@ -114,7 +114,7 @@ func _KitchenService_ChangeOrderStatus_Handler(srv interface{}, ctx context.Cont
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/kitchen.v1.KitchenService/ChangeOrderStatus",
+		FullMethod: "/kitchen.KitchenService/ChangeOrderStatus",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(KitchenServiceServer).ChangeOrderStatus(ctx, req.(*order.ChangeOrderStatusRequest))
@@ -126,7 +126,7 @@ func _KitchenService_ChangeOrderStatus_Handler(srv interface{}, ctx context.Cont
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var KitchenService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "kitchen.v1.KitchenService",
+	ServiceName: "kitchen.KitchenService",
 	HandlerType: (*KitchenServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
