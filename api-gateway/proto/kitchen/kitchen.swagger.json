@@ -16,7 +16,7 @@
     "application/json"
   ],
   "paths": {
-    "/v1/kitchen/order": {
+    "/kitchen/order": {
       "post": {
         "operationId": "KitchenService_ProcessOrder",
         "responses": {
@@ -48,8 +48,8 @@
         ]
       }
     },
-    "/v1/kitchen/order/{id}": {
-      "put": {
+    "/kitchen/order/{id}": {
+      "post": {
         "operationId": "KitchenService_ChangeOrderStatus",
         "responses": {
           "200": {

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"api-gateway/proto/kitchen"
 	"api-gateway/proto/order"
 	"bytes"
 	"context"
@@ -37,6 +38,11 @@ func main() {
 	opts := []grpc.DialOption{grpc.WithInsecure()}
 
 	err := order.RegisterOrderServiceHandlerFromEndpoint(ctx, mux, "localhost:12201", opts)
+	if err != nil {
+		panic(err)
+	}
+
+	err = kitchen.RegisterKitchenServiceHandlerFromEndpoint(ctx, mux, "localhost:50052", opts)
 	if err != nil {
 		panic(err)
 	}

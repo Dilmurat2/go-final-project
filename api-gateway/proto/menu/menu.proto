@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package menu;
 
-import "proto/google/api/annotations.proto";
+import "google/api/annotations.proto";
 import "google/protobuf/empty.proto";
 import "proto/order/order.proto";
 

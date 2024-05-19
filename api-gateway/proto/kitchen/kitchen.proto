@@ -11,13 +11,13 @@ import "google/api/annotations.proto";
 service KitchenService {
   rpc ProcessOrder(order.Order) returns (ProcessOrderResponse) {
     option (google.api.http) = {
-      post: "/v1/kitchen/order"
+      post: "/kitchen/order"
       body: "*"
     };
   }
   rpc ChangeOrderStatus(order.ChangeOrderStatusRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      put: "/v1/kitchen/order/{id}"
+      post: "/kitchen/order/{id}"
       body: "*"
     };
   }

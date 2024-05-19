@@ -132,7 +132,7 @@ func RegisterKitchenServiceHandlerServer(ctx context.Context, mux *runtime.Serve
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/kitchen.KitchenService/ProcessOrder", runtime.WithHTTPPathPattern("/v1/kitchen/order"))
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/kitchen.KitchenService/ProcessOrder", runtime.WithHTTPPathPattern("/kitchen/order"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -149,7 +149,7 @@ func RegisterKitchenServiceHandlerServer(ctx context.Context, mux *runtime.Serve
 
 	})
 
-	mux.Handle("PUT", pattern_KitchenService_ChangeOrderStatus_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_KitchenService_ChangeOrderStatus_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
@@ -157,7 +157,7 @@ func RegisterKitchenServiceHandlerServer(ctx context.Context, mux *runtime.Serve
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/kitchen.KitchenService/ChangeOrderStatus", runtime.WithHTTPPathPattern("/v1/kitchen/order/{id}"))
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/kitchen.KitchenService/ChangeOrderStatus", runtime.WithHTTPPathPattern("/kitchen/order/{id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -221,7 +221,7 @@ func RegisterKitchenServiceHandlerClient(ctx context.Context, mux *runtime.Serve
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/kitchen.KitchenService/ProcessOrder", runtime.WithHTTPPathPattern("/v1/kitchen/order"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/kitchen.KitchenService/ProcessOrder", runtime.WithHTTPPathPattern("/kitchen/order"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -237,13 +237,13 @@ func RegisterKitchenServiceHandlerClient(ctx context.Context, mux *runtime.Serve
 
 	})
 
-	mux.Handle("PUT", pattern_KitchenService_ChangeOrderStatus_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_KitchenService_ChangeOrderStatus_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/kitchen.KitchenService/ChangeOrderStatus", runtime.WithHTTPPathPattern("/v1/kitchen/order/{id}"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/kitchen.KitchenService/ChangeOrderStatus", runtime.WithHTTPPathPattern("/kitchen/order/{id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -263,9 +263,9 @@ func RegisterKitchenServiceHandlerClient(ctx context.Context, mux *runtime.Serve
 }
 
 var (
-	pattern_KitchenService_ProcessOrder_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"v1", "kitchen", "order"}, ""))
+	pattern_KitchenService_ProcessOrder_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"kitchen", "order"}, ""))
 
-	pattern_KitchenService_ChangeOrderStatus_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"v1", "kitchen", "order", "id"}, ""))
+	pattern_KitchenService_ChangeOrderStatus_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"kitchen", "order", "id"}, ""))
 )
 
 var (
