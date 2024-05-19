@@ -9,6 +9,21 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: example
     ports:
       - 27018:27017
-
+    networks:
+        - menu-net
+  menu:
+    container_name: menu
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "50053:50053"
+    depends_on:
+      - mongo
+    networks:
+        - menu-net
 volumes:
   mongo-data:
+networks:
+    menu-net:
+        driver: bridge
