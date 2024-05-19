@@ -16,12 +16,12 @@ service MenuService {
   }
   rpc GetAllMenus (google.protobuf.Empty) returns (GetMenuResponse) {
     option (google.api.http) = {
-      get: "/menu"
+      get: "/menu/all"
     };
   }
   rpc CreateMenu (Menu) returns (Menu) {
     option (google.api.http) = {
-      post: "/menu"
+      post: "/menu/create"
       body: "*"
     };
   }
@@ -44,7 +44,7 @@ service MenuService {
   }
   rpc DeleteItem (DeleteItemRequest) returns (Menu) {
     option (google.api.http) = {
-      delete: "/v1/menu/{menu_id}/item/{item_id}"
+      delete: "/menu/{menu_id}/item/{item_id}"
     };
   }
 }

@@ -188,8 +188,12 @@ func local_request_MenuService_UpdateMenu_0(ctx context.Context, marshaler runti
 
 }
 
+var (
+	filter_MenuService_DeleteMenu_0 = &utilities.DoubleArray{Encoding: map[string]int{"id": 0}, Base: []int{1, 1, 0}, Check: []int{0, 1, 2}}
+)
+
 func request_MenuService_DeleteMenu_0(ctx context.Context, marshaler runtime.Marshaler, client MenuServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq DeleteMenuRequest
+	var protoReq Menu
 	var metadata runtime.ServerMetadata
 
 	var (
@@ -207,6 +211,13 @@ func request_MenuService_DeleteMenu_0(ctx context.Context, marshaler runtime.Mar
 	protoReq.Id, err = runtime.String(val)
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "id", err)
+	}
+
+	if err := req.ParseForm(); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_MenuService_DeleteMenu_0); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
 	msg, err := client.DeleteMenu(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
@@ -215,7 +226,7 @@ func request_MenuService_DeleteMenu_0(ctx context.Context, marshaler runtime.Mar
 }
 
 func local_request_MenuService_DeleteMenu_0(ctx context.Context, marshaler runtime.Marshaler, server MenuServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq DeleteMenuRequest
+	var protoReq Menu
 	var metadata runtime.ServerMetadata
 
 	var (
@@ -233,6 +244,13 @@ func local_request_MenuService_DeleteMenu_0(ctx context.Context, marshaler runti
 	protoReq.Id, err = runtime.String(val)
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "id", err)
+	}
+
+	if err := req.ParseForm(); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_MenuService_DeleteMenu_0); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
 	msg, err := server.DeleteMenu(ctx, &protoReq)
@@ -536,7 +554,7 @@ func RegisterMenuServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/menu.MenuService/DeleteItem", runtime.WithHTTPPathPattern("/v1/menu/{menu_id}/item/{item_id}"))
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/menu.MenuService/DeleteItem", runtime.WithHTTPPathPattern("/menu/{menu_id}/item/{item_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -732,7 +750,7 @@ func RegisterMenuServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/menu.MenuService/DeleteItem", runtime.WithHTTPPathPattern("/v1/menu/{menu_id}/item/{item_id}"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/menu.MenuService/DeleteItem", runtime.WithHTTPPathPattern("/menu/{menu_id}/item/{item_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -764,7 +782,7 @@ var (
 
 	pattern_MenuService_AddItem_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 1, 0, 4, 1, 5, 1, 2, 2}, []string{"menu", "menu_id", "item"}, ""))
 
-	pattern_MenuService_DeleteItem_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"v1", "menu", "menu_id", "item", "item_id"}, ""))
+	pattern_MenuService_DeleteItem_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 1, 0, 4, 1, 5, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"menu", "menu_id", "item", "item_id"}, ""))
 )
 
 var (

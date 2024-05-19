@@ -40,7 +40,8 @@ func (m menuService) Delete(ctx context.Context, id string) error {
 }
 
 func (m menuService) AddItem(ctx context.Context, menuID string, item *models.Item) (*models.Menu, error) {
-	return m.menuRepo.AddItem(ctx, menuID, item)
+	newItem := models.NewItem(item.Name, item.Description, item.Price, item.Weight)
+	return m.menuRepo.AddItem(ctx, menuID, newItem)
 }
 
 func (m menuService) DeleteItem(ctx context.Context, menuID string, itemID string) (*models.Menu, error) {

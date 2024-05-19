@@ -7,6 +7,7 @@ import (
 	"google.golang.org/protobuf/types/known/emptypb"
 	"menu/internal/models"
 	"menu/internal/ports"
+	"menu/pkg/helpers"
 	menu_v1 "menu/proto/menu"
 	"menu/proto/order"
 	"time"
@@ -98,6 +99,28 @@ func (s *Server) GetMenu(ctx context.Context, req *menu_v1.GetMenuRequest) (*men
 	if err != nil {
 		return nil, err
 	}
+	pbMenu := &menu_v1.Menu{
+		Id:          menu.ID,
+		Name:        menu.Name,
+		Description: menu.Description,
+	}
+
+	for _, item := range menu.Items {
+		pbMenu.Items = append(pbMenu.Items, &order.Item{
+			Id:    item.ID,
+			Name:  item.Name,
+			Price: item.Price,
+		})
+	}
+
+	return pbMenu, nil
+}
+
+func (s *Server) AddItem(ctx context.Context, req *menu_v1.AddItemRequest) (*menu_v1.Menu, error) {
+	menu, err := s.menuService.AddItem(ctx, req.GetMenuId(), helpers.ItemProtoToModel(req.GetItem()))
+	if err != nil {
+		return nil, err
+	}
 
 	pbMenu := &menu_v1.Menu{
 		Id:          menu.ID,
@@ -114,4 +137,21 @@ func (s *Server) GetMenu(ctx context.Context, req *menu_v1.GetMenuRequest) (*men
 	}
 
 	return pbMenu, nil
+}
+
+func (s *Server) DeleteMenu(ctx context.Context, req *menu_v1.Menu) (*emptypb.Empty, error) {
+	err := s.menuService.Delete(ctx, req.GetId())
+	if err != nil {
+		return nil, err
+	}
+
+	return &emptypb.Empty{}, nil
+}
+
+func (s *Server) DeleteItem(ctx context.Context, req *menu_v1.DeleteItemRequest) (*menu_v1.Menu, error) {
+	menu, err := s.menuService.DeleteItem(ctx, req.GetMenuId(), req.GetItemId())
+	if err != nil {
+		return nil, err
+	}
+	return helpers.MenuModelToProto(menu), nil
 }

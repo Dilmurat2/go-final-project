@@ -94,6 +94,18 @@
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "description",
+            "in": "query",
+            "required": false,
+            "type": "string"
           }
         ],
         "tags": [
@@ -205,7 +217,7 @@
         ]
       }
     },
-    "/v1/menu/{menuId}/item/{itemId}": {
+    "/menu/{menuId}/item/{itemId}": {
       "delete": {
         "operationId": "MenuService_DeleteItem",
         "responses": {

@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package menu;
 
-import "google/api/annotations.proto";
+import "proto/google/api/annotations.proto";
 import "google/protobuf/empty.proto";
 import "proto/order/order.proto";
 
@@ -31,7 +31,7 @@ service MenuService {
       body: "*"
     };
   }
-  rpc DeleteMenu (DeleteMenuRequest) returns (google.protobuf.Empty) {
+  rpc DeleteMenu (Menu) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       delete: "/menu/{id}"
     };
@@ -44,7 +44,7 @@ service MenuService {
   }
   rpc DeleteItem (DeleteItemRequest) returns (Menu) {
     option (google.api.http) = {
-      delete: "/v1/menu/{menu_id}/item/{item_id}"
+      delete: "/menu/{menu_id}/item/{item_id}"
     };
   }
 }
@@ -72,8 +72,4 @@ message AddItemRequest {
 message DeleteItemRequest {
   string menu_id = 1;
   string item_id = 2;
-}
-
-message DeleteMenuRequest {
-  string id = 1;
 }

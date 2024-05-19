@@ -27,7 +27,7 @@ type MenuServiceClient interface {
 	GetAllMenus(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*GetMenuResponse, error)
 	CreateMenu(ctx context.Context, in *Menu, opts ...grpc.CallOption) (*Menu, error)
 	UpdateMenu(ctx context.Context, in *Menu, opts ...grpc.CallOption) (*Menu, error)
-	DeleteMenu(ctx context.Context, in *DeleteMenuRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	DeleteMenu(ctx context.Context, in *Menu, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	AddItem(ctx context.Context, in *AddItemRequest, opts ...grpc.CallOption) (*Menu, error)
 	DeleteItem(ctx context.Context, in *DeleteItemRequest, opts ...grpc.CallOption) (*Menu, error)
 }
@@ -76,7 +76,7 @@ func (c *menuServiceClient) UpdateMenu(ctx context.Context, in *Menu, opts ...gr
 	return out, nil
 }
 
-func (c *menuServiceClient) DeleteMenu(ctx context.Context, in *DeleteMenuRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+func (c *menuServiceClient) DeleteMenu(ctx context.Context, in *Menu, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
 	err := c.cc.Invoke(ctx, "/menu.MenuService/DeleteMenu", in, out, opts...)
 	if err != nil {
@@ -111,7 +111,7 @@ type MenuServiceServer interface {
 	GetAllMenus(context.Context, *emptypb.Empty) (*GetMenuResponse, error)
 	CreateMenu(context.Context, *Menu) (*Menu, error)
 	UpdateMenu(context.Context, *Menu) (*Menu, error)
-	DeleteMenu(context.Context, *DeleteMenuRequest) (*emptypb.Empty, error)
+	DeleteMenu(context.Context, *Menu) (*emptypb.Empty, error)
 	AddItem(context.Context, *AddItemRequest) (*Menu, error)
 	DeleteItem(context.Context, *DeleteItemRequest) (*Menu, error)
 	mustEmbedUnimplementedMenuServiceServer()
@@ -133,7 +133,7 @@ func (UnimplementedMenuServiceServer) CreateMenu(context.Context, *Menu) (*Menu,
 func (UnimplementedMenuServiceServer) UpdateMenu(context.Context, *Menu) (*Menu, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateMenu not implemented")
 }
-func (UnimplementedMenuServiceServer) DeleteMenu(context.Context, *DeleteMenuRequest) (*emptypb.Empty, error) {
+func (UnimplementedMenuServiceServer) DeleteMenu(context.Context, *Menu) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteMenu not implemented")
 }
 func (UnimplementedMenuServiceServer) AddItem(context.Context, *AddItemRequest) (*Menu, error) {
@@ -228,7 +228,7 @@ func _MenuService_UpdateMenu_Handler(srv interface{}, ctx context.Context, dec f
 }
 
 func _MenuService_DeleteMenu_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DeleteMenuRequest)
+	in := new(Menu)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -240,7 +240,7 @@ func _MenuService_DeleteMenu_Handler(srv interface{}, ctx context.Context, dec f
 		FullMethod: "/menu.MenuService/DeleteMenu",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MenuServiceServer).DeleteMenu(ctx, req.(*DeleteMenuRequest))
+		return srv.(MenuServiceServer).DeleteMenu(ctx, req.(*Menu))
 	}
 	return interceptor(ctx, in, info, handler)
 }

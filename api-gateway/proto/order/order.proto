@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package order;
 
-import "google/api/annotations.proto";
+import "proto/google/api/annotations.proto";
 
 option go_package = "api-gateway/proto/order";
 
