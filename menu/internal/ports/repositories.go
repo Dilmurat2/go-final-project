@@ -13,4 +13,7 @@ type MenuRepository interface {
 	Delete(ctx context.Context, id string) error
 	AddItem(ctx context.Context, menuID string, item *models.Item) (*models.Menu, error)
 	DeleteItem(ctx context.Context, menuID string, itemID string) (*models.Menu, error)
+	GetItems(ctx context.Context, menuID string) (*[]models.Item, error)
+	GetItem(ctx context.Context, menuID string, itemID string) (*models.Item, error)
+	UpdateItem(ctx context.Context, menuID string, itemID string, updatedItem *models.Item) (*models.Item, error)
 }
