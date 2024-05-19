@@ -66,7 +66,7 @@ func main() {
 	loggingMux := LoggingMiddleware(mux)
 
 	log.Printf("server listening at :8081")
-	if err := http.ListenAndServe(":8081", loggingMux); err != nil {
+	if err := http.ListenAndServe(":8080", loggingMux); err != nil {
 		panic(err)
 	}
 }

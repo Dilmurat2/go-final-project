@@ -6,6 +6,6 @@ COPY . .
 
 RUN go mod download
 
-EXPOSE 8081
+EXPOSE 50053
 
 CMD ["go", "run", "cmd/main.go"]
