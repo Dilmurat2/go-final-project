@@ -1,5 +1,22 @@
 version: '3.8'
 services:
+  order:
+    container_name: order
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "12201:12201"
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+    depends_on:
+      - mongo
+    networks:
+      - default
+      - custom_network
+
   mongo:
     image: mongo
     restart: always
@@ -8,6 +25,13 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: ${DB_PASSWORD}
     ports:
       - "${DB_PORT}:27017"
+    networks:
+      - default
+      - custom_network
 
 volumes:
   mongo-data:
+
+networks:
+  custom_network:
+    driver: bridge

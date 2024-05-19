@@ -1,4 +1,11 @@
-FROM ubuntu:latest
-LABEL authors="dilmu"
+FROM golang:latest
 
-ENTRYPOINT ["top", "-b"]
+WORKDIR /app
+
+COPY . .
+
+RUN go mod download
+
+EXPOSE 12201
+
+CMD ["go", "run", "cmd/main.go"]
