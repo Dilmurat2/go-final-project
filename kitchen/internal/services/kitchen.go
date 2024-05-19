@@ -8,10 +8,10 @@ import (
 
 type KitchenService struct {
 	kitchenRepository ports.KitchenRepository
-	orderClient       *orderProxy
+	orderClient       ports.OrderProxy
 }
 
-func NewKitchenService(kitchenRepository ports.KitchenRepository, oc *orderProxy) ports.KitchenService {
+func NewKitchenService(kitchenRepository ports.KitchenRepository, oc ports.OrderProxy) ports.KitchenService {
 	return &KitchenService{kitchenRepository: kitchenRepository,
 		orderClient: oc}
 }

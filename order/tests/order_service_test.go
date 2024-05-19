@@ -6,7 +6,7 @@ import (
 	"go.uber.org/mock/gomock"
 	"orderService/internal/models"
 	"orderService/internal/services"
-	"orderService/tests/mock"
+	"orderService/tests/mocks"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -16,8 +16,8 @@ func TestOrderService_CreateOrder_KitchenServiceError(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	mockOrderRepository := mock.NewMockOrderRepository(ctrl)
-	mockKitchenServiceClientProxy := mock.NewMockKitchenServiceClientProxy(ctrl)
+	mockOrderRepository := mocks.NewMockOrderRepository(ctrl)
+	mockKitchenServiceClientProxy := mocks.NewMockKitchenServiceClientProxy(ctrl)
 
 	orderService := services.NewOrderService(mockOrderRepository, mockKitchenServiceClientProxy)
 
@@ -39,8 +39,8 @@ func TestOrderService_CancelOrder_OrderNotFoundError(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	mockOrderRepository := mock.NewMockOrderRepository(ctrl)
-	mockKitchenServiceClientProxy := mock.NewMockKitchenServiceClientProxy(ctrl)
+	mockOrderRepository := mocks.NewMockOrderRepository(ctrl)
+	mockKitchenServiceClientProxy := mocks.NewMockKitchenServiceClientProxy(ctrl)
 
 	orderService := services.NewOrderService(mockOrderRepository, mockKitchenServiceClientProxy)
 
@@ -56,8 +56,8 @@ func TestOrderService_CancelOrder_OrderCannotBeCancelled(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	mockOrderRepository := mock.NewMockOrderRepository(ctrl)
-	mockKitchenServiceClientProxy := mock.NewMockKitchenServiceClientProxy(ctrl)
+	mockOrderRepository := mocks.NewMockOrderRepository(ctrl)
+	mockKitchenServiceClientProxy := mocks.NewMockKitchenServiceClientProxy(ctrl)
 
 	orderService := services.NewOrderService(mockOrderRepository, mockKitchenServiceClientProxy)
 
