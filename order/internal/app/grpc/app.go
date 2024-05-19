@@ -1,39 +1,41 @@
 package grpcapp
 
 import (
+	"context"
 	"fmt"
-	"github.com/grpc-ecosystem/go-grpc-middleware/v2/interceptors/recovery"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
-	"log/slog"
+	"google.golang.org/grpc/metadata"
+	"log"
 	"net"
 	"orderService/internal/ports"
 	"orderService/internal/server"
 	order_v1 "orderService/proto/order"
-	"runtime/debug"
 )
+
+func loggingInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
+	// Логирование метаданных
+	md, ok := metadata.FromIncomingContext(ctx)
+	if ok {
+		log.Printf("Received metadata: %v", md)
+	} else {
+		log.Println("No metadata received")
+	}
+
+	// Продолжение выполнения запроса
+	return handler(ctx, req)
+}
 
 type App struct {
 	gRPCServer *grpc.Server
 }
 
-func New(
-	orderService ports.OrderService,
-) *App {
-	recoveryOpts := []recovery.Option{
-		recovery.WithRecoveryHandler(func(p interface{}) (err error) {
-			slog.Error("Recovered from panic", slog.Any("panic", p), slog.String("stack", string(debug.Stack())))
-			return status.Errorf(codes.Internal, "internal error")
-		}),
-	}
+func New(orderService ports.OrderService) *App {
+	// Создаем цепочку перехватчиков с нашим middleware логирования
+	chain := grpc.UnaryInterceptor(loggingInterceptor)
 
-	gRPCServer := grpc.NewServer(grpc.ChainUnaryInterceptor(
-		recovery.UnaryServerInterceptor(recoveryOpts...),
-	))
+	gRPCServer := grpc.NewServer(chain)
 
 	srv := server.NewServer(orderService)
-
 	order_v1.RegisterOrderServiceServer(gRPCServer, srv)
 
 	return &App{
@@ -50,24 +52,21 @@ func (a *App) MustRun() {
 func (a *App) Run() error {
 	const op = "grpcapp.Run"
 
-	l, err := net.Listen("tcp", fmt.Sprintf(":%v", "50051"))
+	l, err := net.Listen("tcp", fmt.Sprintf(":%v", "12201"))
 	if err != nil {
 		return fmt.Errorf("%s: %w", op, err)
 	}
-
-	slog.Info("grpc server started", slog.String("addr", l.Addr().String()))
-
+	log.Println("gRPC server started", "addr", l.Addr().String())
 	if err := a.gRPCServer.Serve(l); err != nil {
 		return fmt.Errorf("%s: %w", op, err)
 	}
 
 	return nil
 }
+
 func (a *App) Stop() {
 	const op = "grpcapp.Stop"
 
-	slog.With(slog.String("op", op)).
-		Info("stopping gRPC server", slog.Int("port", 50051))
-
+	log.Println("stopping gRPC server", "port", 50051)
 	a.gRPCServer.GracefulStop()
 }

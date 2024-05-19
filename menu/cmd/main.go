@@ -25,7 +25,7 @@ func main() {
 
 	srv := server.NewServer(menuService)
 
-	lis, err := net.Listen("tcp", fmt.Sprintf(":%v", "50052"))
+	lis, err := net.Listen("tcp", fmt.Sprintf(":%v", "50053"))
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}

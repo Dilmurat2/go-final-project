@@ -2,13 +2,29 @@ syntax = "proto3";
 
 package order;
 
-option go_package = "orderService/proto/order";
+import "google/api/annotations.proto";
+
+option go_package = "proto/order";
 
 service OrderService {
-  rpc CreateOrder(Order) returns (CreateOrderResponse) {}
-  rpc GetOrder(GetOrderRequest) returns (Order) {}
+  rpc CreateOrder(Order) returns (CreateOrderResponse) {
+    option (google.api.http) = {
+      post: "/v1/order"
+      body: "*"
+    };
+  }
+  rpc GetOrder(GetOrderRequest) returns (Order) {
+    option (google.api.http) = {
+      get: "/v1/order/{id}"
+    };
+  }
   rpc ChangeOrderStatus(ChangeOrderStatusRequest) returns (ChangeOrderStatusResponse) {}
-  rpc CancelOrder(ChangeOrderStatusRequest) returns (ChangeOrderStatusResponse) {}
+  rpc CancelOrder(ChangeOrderStatusRequest) returns (ChangeOrderStatusResponse) {
+    option (google.api.http) = {
+      patch: "/v1/order/{id}/cancel"
+      body: "*"
+    };
+  }
 }
 
 message GetOrderRequest {
