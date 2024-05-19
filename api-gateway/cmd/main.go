@@ -2,6 +2,7 @@ package main
 
 import (
 	"api-gateway/proto/kitchen"
+	"api-gateway/proto/menu"
 	"api-gateway/proto/order"
 	"bytes"
 	"context"
@@ -46,7 +47,10 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-
+	err = menu.RegisterMenuServiceHandlerFromEndpoint(ctx, mux, "localhost:50053", opts)
+	if err != nil {
+		panic(err)
+	}
 	loggingMux := LoggingMiddleware(mux)
 
 	log.Printf("server listening at :8081")

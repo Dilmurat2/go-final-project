@@ -8,6 +8,7 @@ import (
 	"menu/internal/models"
 	"menu/internal/ports"
 	menu_v1 "menu/proto/menu"
+	"menu/proto/order"
 	"time"
 )
 
@@ -105,7 +106,7 @@ func (s *Server) GetMenu(ctx context.Context, req *menu_v1.GetMenuRequest) (*men
 	}
 
 	for _, item := range menu.Items {
-		pbMenu.Items = append(pbMenu.Items, &menu_v1.Item{
+		pbMenu.Items = append(pbMenu.Items, &order.Item{
 			Id:    item.ID,
 			Name:  item.Name,
 			Price: item.Price,

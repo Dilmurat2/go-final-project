@@ -2,33 +2,58 @@ syntax = "proto3";
 
 package menu;
 
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+import "proto/order/order.proto";
+
 option go_package = "proto/menu";
 
-import "google/protobuf/empty.proto";
-
 service MenuService {
-  rpc GetMenu (GetMenuRequest) returns (Menu) {}
-  rpc GetAllMenus (google.protobuf.Empty) returns (GetMenuResponse) {}
-  rpc CreateMenu (Menu) returns (Menu) {}
-  rpc UpdateMenu (Menu) returns (Menu) {}
-  rpc DeleteMenu (Menu) returns (google.protobuf.Empty) {}
-  rpc AddItem (AddItemRequest) returns (Menu) {}
-  rpc DeleteItem (DeleteItemRequest) returns (Menu) {}
-}
-
-
-message Item {
-  string id = 1;
-  string name = 2;
-  string description = 3;
-  float price = 4;
+  rpc GetMenu (GetMenuRequest) returns (Menu) {
+    option (google.api.http) = {
+      get: "/menu/{menu_id}"
+    };
+  }
+  rpc GetAllMenus (google.protobuf.Empty) returns (GetMenuResponse) {
+    option (google.api.http) = {
+      get: "/menu"
+    };
+  }
+  rpc CreateMenu (Menu) returns (Menu) {
+    option (google.api.http) = {
+      post: "/menu"
+      body: "*"
+    };
+  }
+  rpc UpdateMenu (Menu) returns (Menu) {
+    option (google.api.http) = {
+      post: "/menu/{id}"
+      body: "*"
+    };
+  }
+  rpc DeleteMenu (Menu) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/menu/{id}"
+    };
+  }
+  rpc AddItem (AddItemRequest) returns (Menu) {
+    option (google.api.http) = {
+      post: "/menu/{menu_id}/item"
+      body: "item"
+    };
+  }
+  rpc DeleteItem (DeleteItemRequest) returns (Menu) {
+    option (google.api.http) = {
+      delete: "/v1/menu/{menu_id}/item/{item_id}"
+    };
+  }
 }
 
 message Menu {
   string id = 1;
   string name = 2;
   string description = 3;
-  repeated Item items = 4;
+  repeated order.Item items = 4;
 }
 
 message GetMenuRequest {
@@ -41,7 +66,7 @@ message GetMenuResponse {
 
 message AddItemRequest {
   string menu_id = 1;
-  Item item = 2;
+  order.Item item = 2;
 }
 
 message DeleteItemRequest {

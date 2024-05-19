@@ -16,7 +16,7 @@
     "application/json"
   ],
   "paths": {
-    "/v1/menu": {
+    "/menu/all": {
       "get": {
         "operationId": "MenuService_GetAllMenus",
         "responses": {
@@ -36,7 +36,9 @@
         "tags": [
           "MenuService"
         ]
-      },
+      }
+    },
+    "/menu/create": {
       "post": {
         "operationId": "MenuService_CreateMenu",
         "responses": {
@@ -68,7 +70,7 @@
         ]
       }
     },
-    "/v1/menu/{id}": {
+    "/menu/{id}": {
       "delete": {
         "operationId": "MenuService_DeleteMenu",
         "responses": {
@@ -91,18 +93,6 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
-          },
-          {
-            "name": "name",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "description",
-            "in": "query",
-            "required": false,
             "type": "string"
           }
         ],
@@ -147,7 +137,7 @@
         ]
       }
     },
-    "/v1/menu/{menuId}": {
+    "/menu/{menuId}": {
       "get": {
         "operationId": "MenuService_GetMenu",
         "responses": {
@@ -177,7 +167,7 @@
         ]
       }
     },
-    "/v1/menu/{menuId}/item": {
+    "/menu/{menuId}/item": {
       "post": {
         "operationId": "MenuService_AddItem",
         "responses": {

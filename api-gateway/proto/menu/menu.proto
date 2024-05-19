@@ -11,34 +11,34 @@ option go_package = "proto/menu";
 service MenuService {
   rpc GetMenu (GetMenuRequest) returns (Menu) {
     option (google.api.http) = {
-      get: "/v1/menu/{menu_id}"
+      get: "/menu/{menu_id}"
     };
   }
   rpc GetAllMenus (google.protobuf.Empty) returns (GetMenuResponse) {
     option (google.api.http) = {
-      get: "/v1/menu"
+      get: "/menu/all"
     };
   }
   rpc CreateMenu (Menu) returns (Menu) {
     option (google.api.http) = {
-      post: "/v1/menu"
+      post: "/menu/create"
       body: "*"
     };
   }
   rpc UpdateMenu (Menu) returns (Menu) {
     option (google.api.http) = {
-      put: "/v1/menu/{id}"
+      put: "/menu/{id}"
       body: "*"
     };
   }
-  rpc DeleteMenu (Menu) returns (google.protobuf.Empty) {
+  rpc DeleteMenu (DeleteMenuRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      delete: "/v1/menu/{id}"
+      delete: "/menu/{id}"
     };
   }
   rpc AddItem (AddItemRequest) returns (Menu) {
     option (google.api.http) = {
-      post: "/v1/menu/{menu_id}/item"
+      post: "/menu/{menu_id}/item"
       body: "item"
     };
   }
@@ -72,4 +72,8 @@ message AddItemRequest {
 message DeleteItemRequest {
   string menu_id = 1;
   string item_id = 2;
+}
+
+message DeleteMenuRequest {
+  string id = 1;
 }

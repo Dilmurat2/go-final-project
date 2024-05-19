@@ -11,8 +11,8 @@ package kitchen
 import (
 	"context"
 	"io"
+	"kitchenService/proto/order"
 	"net/http"
-	"orderService/proto/order"
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/utilities"
