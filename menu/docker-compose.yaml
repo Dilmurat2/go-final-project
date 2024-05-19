@@ -1,16 +1,5 @@
 version: '3.8'
 services:
-  mongo:
-    container_name: mongo-menu
-    image: mongo
-    restart: always
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: example
-    ports:
-      - 27018:27017
-    networks:
-        - menu-net
   menu:
     container_name: menu
     build:
@@ -21,9 +10,25 @@ services:
     depends_on:
       - mongo
     networks:
-        - menu-net
+      - menu-net
+    env_file:
+      - .env
+
+  mongo:
+    container_name: mongo-menu
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    ports:
+      - 27017:27017
+    networks:
+      - menu-net
+
+
 volumes:
   mongo-data:
 networks:
-    menu-net:
-        driver: bridge
+  menu-net:
+    driver: bridge
