@@ -1,6 +1,7 @@
 package helpers
 
 import (
+	"fmt"
 	"orderService/internal/models"
 	order_v1 "orderService/proto/order"
 )
@@ -10,6 +11,7 @@ func OrderProtobufToModel(pbOrder *order_v1.Order) *models.Order {
 	order.Status = models.OrderStatus(pbOrder.GetStatus())
 	order.ID = pbOrder.GetId()
 	for _, item := range pbOrder.Items {
+		fmt.Println(item.GetName())
 		order.Items = append(order.Items, &models.Item{
 			Name:  item.GetName(),
 			Price: item.GetPrice(),

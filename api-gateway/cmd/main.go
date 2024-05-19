@@ -24,17 +24,6 @@ func LoggingMiddleware(next http.Handler) http.Handler {
 		}
 		r.Body = ioutil.NopCloser(bytes.NewBuffer(body))
 
-		// Добавляем заголовки метаданных Postman
-		r.Header.Set("user-agent", "PostmanRuntime/7.39.0")
-		r.Header.Set(":authority", "localhost:12201")
-
-		buf, err := ioutil.ReadAll(r.Body)
-		if err != nil {
-			log.Printf("Error reading gRPC Gateway request body: %v", err)
-		} else {
-			log.Printf("JSON Request: %s", buf)
-		}
-
 		next.ServeHTTP(w, r)
 	})
 }

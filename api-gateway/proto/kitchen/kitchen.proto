@@ -6,7 +6,7 @@ option go_package = "proto/kitchen";
 
 import "google/protobuf/empty.proto";
 import "proto/order/order.proto";
-import "proto/google/api/annotations.proto";
+import "google/api/annotations.proto";
 
 service KitchenService {
   rpc ProcessOrder(order.Order) returns (ProcessOrderResponse) {

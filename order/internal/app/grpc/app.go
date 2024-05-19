@@ -2,6 +2,7 @@ package grpcapp
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"
@@ -13,6 +14,13 @@ import (
 )
 
 func loggingInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
+	// Получаем тело запроса
+	reqBody, err := json.Marshal(req)
+	if err != nil {
+		log.Fatalln("Failed to marshal request body")
+	}
+	log.Printf("Received request body: %s", reqBody)
+
 	// Логирование метаданных
 	md, ok := metadata.FromIncomingContext(ctx)
 	if ok {

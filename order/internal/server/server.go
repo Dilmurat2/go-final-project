@@ -3,6 +3,7 @@ package server
 import (
 	"context"
 	"errors"
+	"fmt"
 	"orderService/internal/ports"
 	"orderService/pkg/app_errors"
 	"orderService/pkg/helpers"
@@ -22,6 +23,7 @@ func NewServer(orderService ports.OrderService) *Server {
 
 func (s *Server) CreateOrder(ctx context.Context, req *order_v1.Order) (*order_v1.CreateOrderResponse, error) {
 	order := helpers.OrderProtobufToModel(req)
+	fmt.Println(req.GetItems())
 	id, err := s.orderService.CreateOrder(ctx, order)
 	if err != nil {
 		return nil, err
