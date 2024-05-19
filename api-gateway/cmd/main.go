@@ -1,6 +1,7 @@
 package main
 
 import (
+	"api-gateway/config"
 	"api-gateway/proto/kitchen"
 	"api-gateway/proto/menu"
 	"api-gateway/proto/order"
@@ -31,6 +32,10 @@ func LoggingMiddleware(next http.Handler) http.Handler {
 }
 
 func main() {
+	cfg, err := config.New()
+	if err != nil {
+		log.Fatalf("error loading config: %v", err)
+	}
 	ctx := context.Background()
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
@@ -38,16 +43,16 @@ func main() {
 	mux := runtime.NewServeMux()
 	opts := []grpc.DialOption{grpc.WithInsecure()}
 
-	err := order.RegisterOrderServiceHandlerFromEndpoint(ctx, mux, "localhost:12201", opts)
+	err = order.RegisterOrderServiceHandlerFromEndpoint(ctx, mux, cfg.OrderServiceAddr, opts)
 	if err != nil {
 		panic(err)
 	}
 
-	err = kitchen.RegisterKitchenServiceHandlerFromEndpoint(ctx, mux, "localhost:50052", opts)
+	err = kitchen.RegisterKitchenServiceHandlerFromEndpoint(ctx, mux, cfg.KitchenServiceAddr, opts)
 	if err != nil {
 		panic(err)
 	}
-	err = menu.RegisterMenuServiceHandlerFromEndpoint(ctx, mux, "localhost:50053", opts)
+	err = menu.RegisterMenuServiceHandlerFromEndpoint(ctx, mux, cfg.MenuServiceAddr, opts)
 	if err != nil {
 		panic(err)
 	}
