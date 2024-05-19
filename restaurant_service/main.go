@@ -1,10 +1,10 @@
 package main
 
 import (
+	"go-final-project/restaurant_service/config"
+	"go-final-project/restaurant_service/handler"
 	"log"
 	"net/http"
-	"restaurant_service/config"
-	"restaurant_service/handler"
 )
 
 func main() {
