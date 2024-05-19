@@ -5,7 +5,7 @@ import (
 	"github.com/kelseyhightower/envconfig"
 )
 
-type database struct {
+type Database struct {
 	Host     string `envconfig:"DB_HOST"`
 	Port     int    `envconfig:"DB_PORT"`
 	User     string `envconfig:"DB_USER"`
@@ -13,7 +13,7 @@ type database struct {
 }
 
 type Config struct {
-	Database database
+	Database Database
 }
 
 func New() (*Config, error) {
