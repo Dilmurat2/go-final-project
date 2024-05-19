@@ -27,6 +27,11 @@ func LoggingMiddleware(next http.Handler) http.Handler {
 		}
 		r.Body = ioutil.NopCloser(bytes.NewBuffer(body))
 
+		if r.Method == http.MethodHead {
+			w.WriteHeader(http.StatusOK)
+			return
+		}
+
 		next.ServeHTTP(w, r)
 	})
 }
@@ -52,10 +57,12 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+
 	err = menu.RegisterMenuServiceHandlerFromEndpoint(ctx, mux, cfg.MenuServiceAddr, opts)
 	if err != nil {
 		panic(err)
 	}
+
 	loggingMux := LoggingMiddleware(mux)
 
 	log.Printf("server listening at :8081")
